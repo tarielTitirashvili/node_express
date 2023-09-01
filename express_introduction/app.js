@@ -42,20 +42,38 @@ const PORT = 5000;
 
 // express
 
+// const express = require("express");
+
+// const app = express();
+
+// app.get('/', (req, res) => {
+//   res.status(404).send('Home page for tarel');
+// })
+
+// app.get('/about', (req, res) => {
+//   res.status(404).send('About page for tarel');
+// })
+
+// app.all('*', (req, res)=>{
+//   res.status(404).send('404 not found')
+// })
+
+// app.listen(PORT, console.log("server is listening on " + PORT))
+
 const express = require("express");
+const path = require("path");
 
 const app = express();
 
-app.get('/', (req, res) => {
-  res.status(404).send('Home page for tarel');
-})
+// setup static path
+app.use(express.static('./public'))
 
-app.get('/about', (req, res) => {
-  res.status(404).send('About page for tarel');
-})
+// app.get('/', (req, res) => {
+//   res.sendFile(path.resolve(__dirname, './navbar-app/index.html'));
+// })
 
 app.all('*', (req, res)=>{
   res.status(404).send('404 not found')
 })
 
-app.listen(PORT, console.log("server is listening on " + PORT))
+app.listen(PORT, console.log("server is listening on " + PORT + "..."))
