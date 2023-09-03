@@ -80,11 +80,20 @@ const PORT = 5000;
 // app.listen(PORT, console.log("server is listening on " + PORT + "..."))
 
 const express = require("express");
+const { people, products, routes } = require("./data")
 
 const app = express();
 
 app.get("/", (req, res) => {
-  res.json([{ name: 'john'}, { name: 'susan'}])
+  res.status(200).json(routes)
+})
+
+app.get("/people", (req, res) => {
+  res.status(200).json(people)
+})
+
+app.get("/products", (req, res) => {
+  res.status(200).json(products)
 })
 
 app.listen(PORT, console.log(`server is listening port ${PORT}...`));

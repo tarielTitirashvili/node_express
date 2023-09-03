@@ -39,4 +39,10 @@ const people = [
   { id: 4, name: 'anna' },
   { id: 5, name: 'emma' },
 ]
-module.exports = { products, people }
+
+const routes = [
+  { id: 1, name: '/' },
+  { id: 2, name: '/people' },
+  { id: 3, name: '/products' },
+]
+module.exports = { products, people, routes }
