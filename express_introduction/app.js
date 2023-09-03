@@ -80,20 +80,37 @@ const PORT = 5000;
 // app.listen(PORT, console.log("server is listening on " + PORT + "..."))
 
 const express = require("express");
-const { people, products, routes } = require("./data")
+const { people, products, routes } = require("./data");
 
 const app = express();
 
-app.get("/", (req, res) => {
-  res.status(200).json(routes)
-})
+app.get(routes[0].name, (req, res) => {
+  // "/"
+  res.status(200).json(routes);
+});
 
-app.get("/people", (req, res) => {
-  res.status(200).json(people)
-})
+app.get(routes[1].name, (req, res) => {
+  // "/api/people"
+  res.status(200).json(people);
+});
 
-app.get("/products", (req, res) => {
-  res.status(200).json(products)
-})
+app.get(routes[2].name, (req, res) => {
+  //"/api/products"
+  const modifiedProducts = products.map(({id, image, name, price})=>{
+    return {id, image, name, price}
+  })
+  res.status(200).json(modifiedProducts);
+});
+
+app.get(routes[3].name, (req, res) => {
+  //"/api/products"
+  const id = +req?.params?.id
+  if(id && id !== NaN){
+    const product = products.find((product)=>product.id === id)
+    res.status(200).json(product);
+  }else{
+    res.status(400).json({message:"you must provide a product id as integer"})
+  }
+});
 
 app.listen(PORT, console.log(`server is listening port ${PORT}...`));

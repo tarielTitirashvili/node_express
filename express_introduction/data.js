@@ -42,7 +42,8 @@ const people = [
 
 const routes = [
   { id: 1, name: '/' },
-  { id: 2, name: '/people' },
-  { id: 3, name: '/products' },
+  { id: 2, name: '/api/people' },
+  { id: 3, name: '/api/products' },
+  { id: 3, name: '/api/product/:id' },
 ]
 module.exports = { products, people, routes }
