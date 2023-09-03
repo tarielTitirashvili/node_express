@@ -104,10 +104,27 @@ app.get(routes[2].name, (req, res) => {
 
 app.get(routes[3].name, (req, res) => {
   //"/api/products"
-  const id = +req?.params?.id
-  if(id && id !== NaN){
-    const product = products.find((product)=>product.id === id)
-    res.status(200).json(product);
+  const productId = +req?.params?.productId
+  if(productId && productId !== NaN){
+    const product = products.find((product)=>product.id === productId)
+    if(product)
+      res.status(200).json(product);
+    else 
+      res.status(404).json({message: "Product not found"})
+  }else{
+    res.status(400).json({message:"you must provide a product id as integer"})
+  }
+});
+// get product with query parameters
+app.get(routes[4].name, (req, res) => {
+  // "/api/query/product"
+  const productId = +req.query.productId
+  if(productId && productId !== NaN){
+    const product = products.find((product)=>product.id === productId)
+    if(product)
+      res.status(200).json(product);
+    else 
+      res.status(404).json({message: "Product not found"})
   }else{
     res.status(400).json({message:"you must provide a product id as integer"})
   }
