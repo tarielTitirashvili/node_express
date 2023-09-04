@@ -111,7 +111,7 @@ const PORT = 5000;
 //     const product = products.find((product)=>product.id === productId)
 //     if(product)
 //       return res.status(200).json(product);
-//     else 
+//     else
 //       return res.status(404).json({message: "Product not found"})
 //   }else
 //     return res.status(400).json({message:"you must provide a product id as integer"})
@@ -125,7 +125,7 @@ const PORT = 5000;
 //     const product = products.find((product)=>product.id === productId)
 //     if(product)
 //       return res.status(200).json(product);
-//     else 
+//     else
 //       return res.status(404).json({message: "Product not found"})
 //   }else
 //     return res.status(400).json({message:"you must provide a product id as integer"})
@@ -133,17 +133,18 @@ const PORT = 5000;
 
 // app.listen(PORT, ()=>console.log(`server is listening port ${PORT}...`));
 
-const express = require('express');
+const express = require("express");
 const app = express();
-const logger = require('./logger')
+const logger = require("./logger");
+const authorize = require('./authorize')
 
-app.use(logger)
+app.use("/api", [authorize, logger]); //if you provide part of rote it will include every route which will include provided one
 
-app.get('/', logger, (req, res) => {
-  res.send('Home')
-})
-app.get('/about', logger, (req, res) => {
-  res.send('About page')
-})
+app.get("/api/home", (req, res) => {
+  res.send("Home " + req.user.name);
+});
+app.get("/about", (req, res) => {
+  res.send("About page");
+});
 
 app.listen(PORT, () => console.log(`server is listening on port ${PORT}...`));
