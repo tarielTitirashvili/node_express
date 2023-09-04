@@ -79,55 +79,71 @@ const PORT = 5000;
 
 // app.listen(PORT, console.log("server is listening on " + PORT + "..."))
 
-const express = require("express");
-const { people, products, routes } = require("./data");
+// BASIC API EXAMPLE
 
+// const express = require("express");
+// const { people, products, routes } = require("./data");
+
+// const app = express();
+
+// app.get(routes[0].name, (req, res) => {
+//   // "/"
+//   return res.status(200).json(routes);
+// });
+
+// app.get(routes[1].name, (req, res) => {
+//   // "/api/people"
+//   return res.status(200).json(people);
+// });
+
+// app.get(routes[2].name, (req, res) => {
+//   //"/api/products"
+//   const modifiedProducts = products.map(({id, image, name, price})=>{
+//     return {id, image, name, price}
+//   })
+//   return res.status(200).json(modifiedProducts);
+// });
+
+// app.get(routes[3].name, (req, res) => {
+//   //"/api/products"
+//   const productId = +req?.params?.productId
+//   if(productId && productId !== NaN){
+//     const product = products.find((product)=>product.id === productId)
+//     if(product)
+//       return res.status(200).json(product);
+//     else 
+//       return res.status(404).json({message: "Product not found"})
+//   }else
+//     return res.status(400).json({message:"you must provide a product id as integer"})
+// });
+
+// // get product with query parameters
+// app.get(routes[4].name, (req, res) => {
+//   // "/api/query/product"
+//   const productId = +req.query.productId
+//   if(productId && productId !== NaN){
+//     const product = products.find((product)=>product.id === productId)
+//     if(product)
+//       return res.status(200).json(product);
+//     else 
+//       return res.status(404).json({message: "Product not found"})
+//   }else
+//     return res.status(400).json({message:"you must provide a product id as integer"})
+// });
+
+// app.listen(PORT, ()=>console.log(`server is listening port ${PORT}...`));
+
+const express = require('express');
 const app = express();
+const logger = require('./logger')
 
-app.get(routes[0].name, (req, res) => {
-  // "/"
-  res.status(200).json(routes);
-});
+app.use(logger)
 
-app.get(routes[1].name, (req, res) => {
-  // "/api/people"
-  res.status(200).json(people);
-});
+app.get('/', logger, (req, res) => {
+  res.send('Home')
+})
+app.get('/about', logger, (req, res) => {
+  res.send('About page')
+})
 
-app.get(routes[2].name, (req, res) => {
-  //"/api/products"
-  const modifiedProducts = products.map(({id, image, name, price})=>{
-    return {id, image, name, price}
-  })
-  res.status(200).json(modifiedProducts);
-});
-
-app.get(routes[3].name, (req, res) => {
-  //"/api/products"
-  const productId = +req?.params?.productId
-  if(productId && productId !== NaN){
-    const product = products.find((product)=>product.id === productId)
-    if(product)
-      res.status(200).json(product);
-    else 
-      res.status(404).json({message: "Product not found"})
-  }else{
-    res.status(400).json({message:"you must provide a product id as integer"})
-  }
-});
-// get product with query parameters
-app.get(routes[4].name, (req, res) => {
-  // "/api/query/product"
-  const productId = +req.query.productId
-  if(productId && productId !== NaN){
-    const product = products.find((product)=>product.id === productId)
-    if(product)
-      res.status(200).json(product);
-    else 
-      res.status(404).json({message: "Product not found"})
-  }else{
-    res.status(400).json({message:"you must provide a product id as integer"})
-  }
-});
-
-app.listen(PORT, console.log(`server is listening port ${PORT}...`));
+app.listen(PORT, () => console.log(`server is listening on port ${PORT}...`));
