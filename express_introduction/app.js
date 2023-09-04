@@ -14,7 +14,7 @@ const PORT = 5000;
 //   switch (url) {
 //     case "/":
 //       res.writeHead(200, { "Content-Type": "text/html" });
-//       res.end(getFile("./navbar-app/index.html"));
+//       res.end(getFile("./navbar-app/index.html"));dfasfas
 //       break;
 //     case "/styles.css":
 //       res.writeHead(200, { "Content-Type": "text/css" });
