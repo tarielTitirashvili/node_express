@@ -1,8 +1,7 @@
-const express = require('express');
+const express = require("express");
+const { getHomePageData } = require("../controllers/home");
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  res.json("Home " + req.user.name);
-});
+router.get("/", getHomePageData);
 
 module.exports = router;
