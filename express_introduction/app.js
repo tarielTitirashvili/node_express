@@ -171,6 +171,21 @@ app.get("/about", (req, res) => {
   res.json("About page");
 });
 
+app.put('/api/people/:id', (req, res) => {
+  const { id } = req.params;
+  const { name } = req.body;
+  const exists = people.includes(human => human.id === id)
+  if(exists){
+    for(let i = 0; i < people.length; i){
+      if(people[i].id === id){
+        people[i].name = name;
+        res.json({success: true, msg: 'updated person ' + name})
+      }
+    }
+  }else
+    res.json({success: false, msg: "couldn't find person"})
+});
+
 app.post("/login", (req, res) => {
   if (req?.body?.name) {
     const name = req?.body?.name;
