@@ -137,7 +137,7 @@ const express = require("express");
 const app = express();
 // const logger = require("./logger");
 // const authorize = require('./authorize');
-const { people } = require('./data');
+let { people } = require('./data');
 
 // static assets
 app.use(express.static('./methods-public'));
@@ -172,18 +172,28 @@ app.get("/about", (req, res) => {
 });
 
 app.put('/api/people/:id', (req, res) => {
-  const { id } = req.params;
+  const id = +req?.params?.id;
   const { name } = req.body;
-  const exists = people.includes(human => human.id === id)
+  const exists = people.find(human => human.id === id)
   if(exists){
     for(let i = 0; i < people.length; i){
-      if(people[i].id === id){
+      if(people[i].id === +id){
         people[i].name = name;
-        res.json({success: true, msg: 'updated person ' + name})
+        res.status(200).json({success: true, msg: 'updated person ' + name})
       }
     }
   }else
-    res.json({success: false, msg: "couldn't find person"})
+    res.status(404).json({success: false, msg: "couldn't find person"})
+});
+
+app.delete('/api/people/:id', (req, res) => {
+  const id = +req?.params?.id;
+  const exists = people.find(human => human.id === id)
+  if(exists){
+    people = people.filter(human => human.id !== id)
+    res.status(200).json({success: true, people: people})
+  }else
+    res.status(404).json({success: false, msg: "couldn't find person"})
 });
 
 app.post("/login", (req, res) => {
