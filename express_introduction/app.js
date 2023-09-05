@@ -134,10 +134,15 @@ const PORT = 5000;
 // app.listen(PORT, ()=>console.log(`server is listening port ${PORT}...`));
 
 const express = require("express");
+const peopleRouter = require('./routes/people');
+const loginRouter = require('./routes/auth');
+const aboutRouter = require('./routes/about');
+const homeRouter = require('./routes/home');
+
 const app = express();
 // const logger = require("./logger");
 // const authorize = require('./authorize');
-let { people } = require('./data');
+
 
 // static assets
 app.use(express.static('./methods-public'));
@@ -150,58 +155,11 @@ app.use(express.json())
 
 // app.use("/api", [authorize, logger]); //if you provide part of rote it will include every route which will include provided one
 
-app.get("/api/home", (req, res) => {
-  res.json("Home " + req.user.name);
-});
-app.get('/api/people', (req, res) => {
-  res.json({ success: true, data: people });
-});
+app.use('/login', loginRouter)
+app.use('/about', aboutRouter)
+app.use('/api/home', homeRouter)
+app.use('/api/people', peopleRouter)
 
-app.post('/api/people', (req, res) => {
-  const { name } = req.body;
-  console.log(req.body)
-  if (name) {
-    people.push({ name, id: people.length });
-    return res.status(201).json({ success: true, person: name });
-  }
-  res.status(400).json({ success: false, msg: "name is required" });
-});
 
-app.get("/about", (req, res) => {
-  res.json("About page");
-});
-
-app.put('/api/people/:id', (req, res) => {
-  const id = +req?.params?.id;
-  const { name } = req.body;
-  const exists = people.find(human => human.id === id)
-  if(exists){
-    for(let i = 0; i < people.length; i){
-      if(people[i].id === +id){
-        people[i].name = name;
-        res.status(200).json({success: true, msg: 'updated person ' + name})
-      }
-    }
-  }else
-    res.status(404).json({success: false, msg: "couldn't find person"})
-});
-
-app.delete('/api/people/:id', (req, res) => {
-  const id = +req?.params?.id;
-  const exists = people.find(human => human.id === id)
-  if(exists){
-    people = people.filter(human => human.id !== id)
-    res.status(200).json({success: true, people: people})
-  }else
-    res.status(404).json({success: false, msg: "couldn't find person"})
-});
-
-app.post("/login", (req, res) => {
-  if (req?.body?.name) {
-    const name = req?.body?.name;
-    res.status(200).json('welcome ' + name);
-  } else
-    return res.status(401).json('please provide a name');
-});
 
 app.listen(PORT, () => console.log(`server is listening on port ${PORT}...`));
