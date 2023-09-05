@@ -136,7 +136,7 @@ const PORT = 5000;
 const express = require("express");
 const app = express();
 const logger = require("./logger");
-const authorize = require('./authorize')
+const authorize = require('./authorize');
 
 app.use("/api", [authorize, logger]); //if you provide part of rote it will include every route which will include provided one
 
