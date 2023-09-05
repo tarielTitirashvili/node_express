@@ -137,29 +137,46 @@ const express = require("express");
 const app = express();
 // const logger = require("./logger");
 // const authorize = require('./authorize');
+const { people } = require('./data');
 
 // static assets
-app.use(express.static('./methods-public'))
+app.use(express.static('./methods-public'));
 
 // parse form data
-app.use(express.urlencoded({extended: false}))
+app.use(express.urlencoded({ extended: false }));
+
+// parse json data
+app.use(express.json())
 
 // app.use("/api", [authorize, logger]); //if you provide part of rote it will include every route which will include provided one
 
 app.get("/api/home", (req, res) => {
   res.send("Home " + req.user.name);
 });
+app.get('/api/people', (req, res) => {
+  res.send({ success: true, data: people });
+});
+
+app.post('/api/people', (req, res) => {
+  const { name } = req.body;
+  console.log(req.body)
+  if (name) {
+    people.push({name, id: people.length});
+    return res.status(201).send(`new user was added user name is ${name}`);
+  }
+  res.send({ success: true, data: people });
+});
+
 app.get("/about", (req, res) => {
   res.send("About page");
 });
 
 app.post("/login", (req, res) => {
-  if(req?.body?.name){
+  if (req?.body?.name) {
     const name = req?.body?.name;
     res.status(200).send('welcome ' + name);
-  }else{
+  } else
     return res.status(401).send('please provide a name');
-  }
-})
+});
 
 app.listen(PORT, () => console.log(`server is listening on port ${PORT}...`));
