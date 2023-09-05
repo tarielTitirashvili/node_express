@@ -151,32 +151,32 @@ app.use(express.json())
 // app.use("/api", [authorize, logger]); //if you provide part of rote it will include every route which will include provided one
 
 app.get("/api/home", (req, res) => {
-  res.send("Home " + req.user.name);
+  res.json("Home " + req.user.name);
 });
 app.get('/api/people', (req, res) => {
-  res.send({ success: true, data: people });
+  res.json({ success: true, data: people });
 });
 
 app.post('/api/people', (req, res) => {
   const { name } = req.body;
   console.log(req.body)
   if (name) {
-    people.push({name, id: people.length});
-    return res.status(201).send(`new user was added user name is ${name}`);
+    people.push({ name, id: people.length });
+    return res.status(201).json({ success: true, person: name });
   }
-  res.send({ success: true, data: people });
+  res.status(400).json({ success: false, msg: "name is required" });
 });
 
 app.get("/about", (req, res) => {
-  res.send("About page");
+  res.json("About page");
 });
 
 app.post("/login", (req, res) => {
   if (req?.body?.name) {
     const name = req?.body?.name;
-    res.status(200).send('welcome ' + name);
+    res.status(200).json('welcome ' + name);
   } else
-    return res.status(401).send('please provide a name');
+    return res.status(401).json('please provide a name');
 });
 
 app.listen(PORT, () => console.log(`server is listening on port ${PORT}...`));
