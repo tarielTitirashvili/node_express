@@ -135,10 +135,16 @@ const PORT = 5000;
 
 const express = require("express");
 const app = express();
-const logger = require("./logger");
-const authorize = require('./authorize');
+// const logger = require("./logger");
+// const authorize = require('./authorize');
 
-app.use("/api", [authorize, logger]); //if you provide part of rote it will include every route which will include provided one
+// static assets
+app.use(express.static('./methods-public'))
+
+// parse form data
+app.use(express.urlencoded({extended: false}))
+
+// app.use("/api", [authorize, logger]); //if you provide part of rote it will include every route which will include provided one
 
 app.get("/api/home", (req, res) => {
   res.send("Home " + req.user.name);
@@ -146,5 +152,14 @@ app.get("/api/home", (req, res) => {
 app.get("/about", (req, res) => {
   res.send("About page");
 });
+
+app.post("/login", (req, res) => {
+  if(req?.body?.name){
+    const name = req?.body?.name;
+    res.status(200).send('welcome ' + name);
+  }else{
+    return res.status(401).send('please provide a name');
+  }
+})
 
 app.listen(PORT, () => console.log(`server is listening on port ${PORT}...`));
