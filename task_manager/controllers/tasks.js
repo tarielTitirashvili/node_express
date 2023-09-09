@@ -12,7 +12,7 @@ const createTask = (req, res) =>{
 };
 
 const updateTask = (req, res) =>{
-  res.send('create new task');
+  res.send('update old task');
 };
 
 const deleteTask = (req, res) =>{
