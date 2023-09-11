@@ -6,9 +6,11 @@ require("dotenv").config();
 const app = express();
 const PORT = 3000;
 
+// middleware
 app.use(express.static("./public"));
 app.use(express.json());
 
+// routes
 app.use("/api/v1/tasks", tasksRoutes);
 
 const start = async () => {

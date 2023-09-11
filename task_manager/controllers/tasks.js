@@ -1,4 +1,5 @@
 const Task = require("../models/task");
+const { checkTaskExistence } = require("../utils/controllerHelperFunctions");
 // const { basicTryCatcher } = require('../utils/controllerHalperFunctions')
 
 const getAllTasks = async (req, res) => {
@@ -11,9 +12,15 @@ const getAllTasks = async (req, res) => {
   };
 };
 
-const getTask = (req, res) => {
-  const { id } = req.params;
-  res.send("get single task " + id);
+const getTask = async (req, res) => {
+  try {
+    const { id: taskId } = req.params;
+    const task = await Task.findOne({ _id: taskId });
+    checkTaskExistence(task, res);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ msg: err });
+  };
 };
 
 const createTask = async (req, res) => {
@@ -21,21 +28,35 @@ const createTask = async (req, res) => {
     if (req.body?.name) {
       const createTask = await Task.create(req.body);
       res.status(201).json({ createTask });
-    } else {
+    } else
       res.status(400).message("bad request");
-    }
   } catch (err) {
     console.log(err);
     res.status(500).json({ msg: err });
   };
 };
 
-const updateTask = (req, res) => {
-  res.send("update old task");
+const deleteTask = async (req, res) => {
+  const { id: taskId } = req.params;
+  try {
+    const task = await Task.findOneAndDelete({ _id: taskId })
+    checkTaskExistence(task, res);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ msg: err });
+  };
 };
 
-const deleteTask = (req, res) => {
-  res.send("delete task");
+const updateTask = async (req, res) => {
+  try {
+    const { id: taskId } = req.params;
+    const body = req.body;
+    const updatedTask = await Task.findOneAndUpdate({ _id: taskId }, body, { new: true, runValidators: true });
+    checkTaskExistence(updatedTask, res);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ msg: err });
+  };
 };
 
 module.exports = {
