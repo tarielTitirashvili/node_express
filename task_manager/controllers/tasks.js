@@ -1,12 +1,14 @@
 const Task = require("../models/task");
+// const { basicTryCatcher } = require('../utils/controllerHalperFunctions')
 
 const getAllTasks = async (req, res) => {
-  try{
-    const tasks = await Task.find()
-    res.json({tasks});
-  }catch(err){
-    console.log(err)
-  }
+  try {
+    const tasks = await Task.find();
+    res.json({ tasks });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ msg: err });
+  };
 };
 
 const getTask = (req, res) => {
@@ -16,11 +18,16 @@ const getTask = (req, res) => {
 
 const createTask = async (req, res) => {
   try {
-    const createTask = await Task.create(req.body);
-    res.status(201).json({ createTask });
+    if (req.body?.name) {
+      const createTask = await Task.create(req.body);
+      res.status(201).json({ createTask });
+    } else {
+      res.status(400).message("bad request");
+    }
   } catch (err) {
     console.log(err);
-  }
+    res.status(500).json({ msg: err });
+  };
 };
 
 const updateTask = (req, res) => {
