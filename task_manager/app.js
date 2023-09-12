@@ -1,6 +1,8 @@
 const express = require("express");
 const { tasksRoutes } = require("./routes/tasks");
 const connectionToDB = require("./db/connection");
+const notFound = require("./middleware/notFound");
+const errorHandler = require("./middleware/errorHandler");
 require("dotenv").config();
 
 const app = express();
@@ -12,6 +14,11 @@ app.use(express.json());
 
 // routes
 app.use("/api/v1/tasks", tasksRoutes);
+
+// 404 not found middleware
+app.use(notFound);
+// error handler middleware
+app.use(errorHandler);
 
 const start = async () => {
   try {
