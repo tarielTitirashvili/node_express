@@ -20,12 +20,12 @@ const createTask = asyncWrapper(async (req, res, next) => {
     res.status(201).json({ createTask });
   } else {
     return next(createCustomAPIError("bad request", 400));
-  }
+  };
 });
 
 const deleteTask = asyncWrapper(async (req, res) => {
   const { id: taskId } = req.params;
-  const task = await Task.findOneAndDelete({ _id: taskId })
+  const task = await Task.findOneAndDelete({ _id: taskId });
   checkTaskExistence(task, res);
 });
 
