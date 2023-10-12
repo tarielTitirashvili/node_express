@@ -3,12 +3,12 @@ const Product = require('../models/product')
 const getAllProducts = async (req, res) => {
   const {name, featured} = req.query;
   const requestedOBJ = {};
-  if(featured){
-    let featuredStatus = featured === 'true' ? true : featured === 'false' && false;
+  if(featured === 'true' || featured === 'false'){
+    let featuredStatus = featured === 'true' ? true : false;
     if(featuredStatus)
       requestedOBJ.featured = featuredStatus;
   };
-  const products = await Product.find({featured});
+  const products = await Product.find(requestedOBJ);
   res.status(200).json({products, length: products.length});
 };
 
