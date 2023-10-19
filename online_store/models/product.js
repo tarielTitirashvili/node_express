@@ -1,4 +1,4 @@
-const mongoose  = require('mongoose');
+const mongoose = require('mongoose');
 
 const companies = ['ikea', 'liddy', 'caressa', 'marcos']
 
@@ -15,7 +15,7 @@ const productSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
-  rating:{
+  rating: {
     type: Number,
     default: 0
   },
