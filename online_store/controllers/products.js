@@ -23,7 +23,6 @@ const getAllProducts = async (req, res) => {
     result = result.sort(sortList);
   }
   const products = await result;
-  console.log(sort);
   res.status(200).json({products, length: products.length});
 };
 
