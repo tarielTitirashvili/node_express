@@ -1,7 +1,7 @@
 const Product = require('../models/product')
 
 const getAllProducts = async (req, res) => {
-  const { company, featured, name, sort, limit } = req.query;
+  const { company, featured, name, sort, limit, page } = req.query;
   const requestedOBJ = {};
   
   // check featured
@@ -24,7 +24,6 @@ const getAllProducts = async (req, res) => {
     result = result.sort(sortList);
   }
   if (limit) {
-    console.log(limit);
     if (isNaN(+limit) === true)
       throw new Error('limit must be a number');
     else
