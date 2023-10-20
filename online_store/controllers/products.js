@@ -1,9 +1,9 @@
 const Product = require('../models/product')
 
 const getAllProducts = async (req, res) => {
-  const { company, featured, name, sort, limit, page } = req.query;
+  const { company, featured, name, sort, limit, page, numericFilters } = req.query;
   const requestedOBJ = {};
-  
+
   // check featured
   if (featured === 'true' || featured === 'false') {
     let featuredStatus = featured === 'true' ? true : false;
@@ -17,6 +17,19 @@ const getAllProducts = async (req, res) => {
   if (name)
     requestedOBJ.name = { $regex: name, $options: 'i' };
 
+  if (numericFilters) {
+    const operatorMap = {
+      '>': '$gt',
+      '>=': '$gte',
+      '=': '$e',
+      '<': '$lt',
+      '=<': '$lte',
+    };
+    const regEx = /\b(<|>|>=|=|<|<=)\b/g
+    let filters = numericFilters.replace(regEx,(match)=>`-${operatorMap[match]}-`).split(',').forEach(items=>items.split('-'));
+    console.log(filters.split);
+  };
+
   let result = Product.find(requestedOBJ);
 
   if (sort) {
@@ -29,11 +42,11 @@ const getAllProducts = async (req, res) => {
     else
       result.limit(+limit);
   };
-  if(page){
-    if(isNaN(+page)){
+  if (page) {
+    if (isNaN(+page)) {
       throw new Error('page must be a number');
-    }else{
-      let skip =  isNaN(+limit) ? (+page-1)*10 : +limit*(+page-1);
+    } else {
+      let skip = isNaN(+limit) ? (+page - 1) * 10 : +limit * (+page - 1);
       result.skip(skip)
     }
   }
