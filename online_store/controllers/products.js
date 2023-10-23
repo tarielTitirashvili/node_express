@@ -25,17 +25,26 @@ const getAllProducts = async (req, res) => {
       '<': '$lt',
       '=<': '$lte',
     };
-    const regEx = /\b(<|>|>=|=|<|<=)\b/g
-    let filters = numericFilters.replace(regEx,(match)=>`-${operatorMap[match]}-`).split(',').forEach(items=>items.split('-'));
-    console.log(filters.split);
+    const options = ['price', 'rating'];
+    const regEx = /\b(<|>|>=|=|<|<=)\b/g;
+    numericFilters
+      .replace(regEx, (match) => `-${operatorMap[match]}-`)
+      .split(',')
+      .map(
+        items => {
+          const [field, operator, value] = items.split('-')
+          if (options.includes(field) && !isNaN(+value)) {
+            requestedOBJ[field] = { [operator]: +value }
+          };
+        }
+      );
   };
-
   let result = Product.find(requestedOBJ);
 
   if (sort) {
     const sortList = sort.split(',').join(' ');
     result = result.sort(sortList);
-  }
+  };
   if (limit) {
     if (isNaN(+limit) === true)
       throw new Error('limit must be a number');
@@ -48,8 +57,8 @@ const getAllProducts = async (req, res) => {
     } else {
       let skip = isNaN(+limit) ? (+page - 1) * 10 : +limit * (+page - 1);
       result.skip(skip)
-    }
-  }
+    };
+  };
   const products = await result;
   res.status(200).json({ products, length: products.length });
 };
