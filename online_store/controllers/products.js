@@ -17,6 +17,7 @@ const getAllProducts = async (req, res) => {
   if (name)
     requestedOBJ.name = { $regex: name, $options: 'i' };
 
+  // adding numeric filters to our requestedOBJ
   if (numericFilters) {
     const operatorMap = {
       '>': '$gt',
