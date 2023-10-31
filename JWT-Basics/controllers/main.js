@@ -1,5 +1,5 @@
-const CustomAPIError = require('../errors/custom-error')
-const jwt = require('jsonwebtoken')
+const CustomAPIError = require('../errors/custom-error');
+const jwt = require('jsonwebtoken');
 
 const login = (req, res) => {
   const {username: userName, password} = req.body;
@@ -8,15 +8,20 @@ const login = (req, res) => {
     throw new CustomAPIError('please provide username and password', 400);
   }
   // this parameter must be provided from the DB
-  const id = new Date().getDate()
+  const id = new Date().getDate();
 
   // never send back confidential information
-  const token = jwt.sign({id, userName}, process.env.JWT_SECRET_KEY, {expiresIn: '30d'})
+  const token = jwt.sign({id, userName}, process.env.JWT_SECRET_KEY, {expiresIn: '30d'});
 
   res.status(200).json({msg: 'user created', token});
 };
 
 const dashboard = async (req, res) => {
+  const authHeader = req.headers.authorization;
+  //check if token was provided
+  if(!authHeader || !authHeader.startsWith('Bearer '))
+    throw new CustomAPIError('unauthorized', 401);
+
   const luckyNumber = Math.floor(Math.random() * 100);
   res.status(200).json({
     msg: `Hello, John Doe`, 
@@ -27,4 +32,4 @@ const dashboard = async (req, res) => {
 module.exports = {
   login,
   dashboard,
-}
+};
