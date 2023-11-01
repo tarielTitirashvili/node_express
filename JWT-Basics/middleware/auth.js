@@ -12,7 +12,7 @@ const authMiddleWare = (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
     const { id, userName } = decoded;
-    req.user = {id, userName};
+    req.user = { id, userName };
 
   } catch (err) {
     throw new CustomAPIError('not authorized to access this route', 401);
