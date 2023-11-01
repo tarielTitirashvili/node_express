@@ -22,11 +22,21 @@ const dashboard = async (req, res) => {
   if(!authHeader || !authHeader.startsWith('Bearer '))
     throw new CustomAPIError('unauthorized', 401);
 
-  const luckyNumber = Math.floor(Math.random() * 100);
-  res.status(200).json({
-    msg: `Hello, John Doe`, 
-    secret: `here is your authorization data, your lucky number is ${luckyNumber}` 
-  });
+  const token = authHeader.split(' ')[1];
+
+  // verify token
+  try{
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+
+    const luckyNumber = Math.floor(Math.random() * 100);
+
+    res.status(200).json({
+      msg: `Hello, John Doe`, 
+      secret: `here is your authorization data, your lucky number is ${luckyNumber} ${ JSON.stringify(decoded)}` 
+    });
+  }catch (err){
+    CustomAPIError(error.message, error.status);
+  };  
 };
 
 module.exports = {
