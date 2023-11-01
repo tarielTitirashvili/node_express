@@ -15,7 +15,7 @@ const authMiddleWare = (req, res, next) => {
     req.user = {id, userName};
 
   } catch (err) {
-    CustomAPIError(error.message, error.status);
+    throw new CustomAPIError('not authorized to access this route', 401);
   };
   next();
 };
