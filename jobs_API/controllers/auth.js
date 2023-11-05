@@ -9,11 +9,8 @@ const register = async (req, res) => {
   if (!body.name || !body.email || !body.password) {
     throw new Errors.BadRequestError("please provide valid credentials!");
   } else {
-    const salt = await bcrypt.genSalt(12);
-    const hashedPassword = await bcrypt.hash(body.password, salt);
-  
-    console.log('hashedPassword', hashedPassword);
-    const user = await User.create({...req.body, password: hashedPassword});
+    // password hashing is in User model as middleware
+    const user = await User.create({...req.body});
     res.status(StatusCodes.CREATED).json({ msg: "user was registered!", user });
   }
 };
