@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -24,12 +25,16 @@ const UserSchema = new mongoose.Schema({
   },
 });
 
+UserSchema.methods.CreateJWT = function () {
+  return jwt.sign({ userId: this._id, name: this.name }, process.env.JWT_SECRET_KEY, {
+    expiresIn: "30d",
+  });
+};
+
 UserSchema.pre("save", async function () {
   // from mongoose 5.5 it works without calling next()
-  console.log('password', this.password);
   const salt = await bcrypt.genSalt(12);
   this.password = await bcrypt.hash(this.password, salt);
-  console.log('password', this.password);
 });
 
 module.exports = mongoose.model("User", UserSchema);
