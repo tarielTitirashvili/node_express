@@ -5,6 +5,9 @@ const app = express();
 
 const connectDB = require("./db/connect");
 
+// extra packages
+app.use(express.json());
+
 // routes
 const authRoutes = require("./routes/auth");
 const jobRoutes = require("./routes/jobs");
@@ -16,8 +19,6 @@ app.use("/api/v1/jobs", jobRoutes);
 const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
 
-app.use(express.json());
-// extra packages
 
 // routes
 app.get("/", (req, res) => {
