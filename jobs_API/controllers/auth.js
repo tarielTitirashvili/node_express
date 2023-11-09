@@ -22,7 +22,12 @@ const login = async (req, res) => {
   if(!email || !password) {
     throw new Errors.BadRequestError("please provide valid credentials!")
   };
-
+  const user = await User.find({email});
+  if(user.length === 0) {
+    throw new Errors.BadRequestError("user not found");
+  }else{
+    console.log(user);
+  }
   res.send("user was authenticated!");
 };
 
