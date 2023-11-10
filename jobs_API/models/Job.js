@@ -1,6 +1,6 @@
 const Mongoose = require("mongoose");
 
-const JobSchema = Mongoose.createSchema(
+const JobSchema = Mongoose.Schema(
   {
     company: {
       type: String,
