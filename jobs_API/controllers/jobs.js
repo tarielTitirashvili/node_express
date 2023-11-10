@@ -3,7 +3,7 @@ const getJobs = (req, res) => {
 };
 
 const getJob = (req, res) => {
-  res.send("getJob!");
+  res.send(req.user);
 };
 
 const createJob = (req, res) => {
