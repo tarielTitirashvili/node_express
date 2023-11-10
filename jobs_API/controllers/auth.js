@@ -2,7 +2,7 @@ const Errors = require("../errors");
 const User = require("../models/User");
 const { StatusCodes } = require("http-status-codes");
 // const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
+// const bcrypt = require("bcryptjs");
 
 const register = async (req, res) => {
   const body = req.body;

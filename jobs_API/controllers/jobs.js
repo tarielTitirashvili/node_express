@@ -2,8 +2,9 @@ const Job = require("../models/Job");
 const Errors = require("../errors");
 const { StatusCodes } = require("http-status-codes");
 
-const getJobs = (req, res) => {
-  res.send("getJobs!");
+const getJobs = async (req, res) => {
+  const jobs = await Job.find();
+  res.status(StatusCodes.OK).json(jobs);
 };
 
 const getJob = (req, res) => {
