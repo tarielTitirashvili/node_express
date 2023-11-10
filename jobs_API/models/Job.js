@@ -26,7 +26,7 @@ const JobSchema = Mongoose.Schema(
       required: [true, "user must be authenticated"],
     },
   },
-  { timeStamps: true }
+  { timestamps: true }
 );
 
 module.exports = Mongoose.model("Job", JobSchema);
