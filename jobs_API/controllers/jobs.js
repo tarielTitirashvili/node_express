@@ -13,7 +13,7 @@ const getJob = (req, res) => {
 
 const createJob = async (req, res) => {
   const { body, user } = req;
-  if (!body.company || !body.position || !body.status || !user.userId) {
+  if (!body.company || !body.position || !body.status) {
     throw new Errors.BadRequestError(
       "bad request required value was not provided!"
     );
