@@ -14,7 +14,7 @@ const authRoutes = require("./routes/auth");
 const jobRoutes = require("./routes/jobs");
 
 app.use("/api/v1/auth", authRoutes);
-app.use("/api/v1/jobs", authMiddleWare, jobRoutes);
+app.use("/api/v1/job", authMiddleWare, jobRoutes);
 
 // error handler
 const notFoundMiddleware = require("./middleware/not-found");
