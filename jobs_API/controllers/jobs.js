@@ -3,14 +3,17 @@ const Errors = require("../errors");
 const { StatusCodes } = require("http-status-codes");
 
 const getJobs = async (req, res) => {
-  const jobs = await Job.find({createdBy: req.user.userId}).sort('createdAt');
-  res.status(StatusCodes.OK).json({jobs, count: jobs.length});
+  const jobs = await Job.find({ createdBy: req.user.userId }).sort("createdAt");
+  res.status(StatusCodes.OK).json({ jobs, count: jobs.length });
 };
 
 const getJob = async (req, res) => {
-  const job = await Job.find({createdBy: req.user.userId, _id: req.params.id}).sort('createdAt');
-  if(!job){
-    throw new Errors.NotFoundError('job not found');
+  const job = await Job.find({
+    createdBy: req.user.userId,
+    _id: req.params.id,
+  }).sort("createdAt");
+  if (!job) {
+    throw new Errors.NotFoundError("job not found");
   }
   res.status(StatusCodes.OK).json(job);
 };
@@ -21,14 +24,32 @@ const createJob = async (req, res) => {
     throw new Errors.BadRequestError(
       "bad request required value was not provided!"
     );
-  };
+  }
   body.createdBy = user.userId;
   const newJob = await Job.create(body);
   res.status(StatusCodes.CREATED).json(newJob);
 };
 
-const updateJob = (req, res) => {
-  res.send("updateJob!");
+const updateJob = async (req, res) => {
+  const { body, user, params } = req;
+  // validate request required params
+  if (!body.company || !body.status || !body.position) {
+    throw new Errors.BadRequestError(
+      "required parameters or parameter is missing"
+    );
+  }
+  //find job in DB and update it
+  const updatedJob = await Job.findByIdAndUpdate(
+    { _id: params.id, createdBy: user.userId },
+    body,
+    { new: true, runValidators: true }
+  );
+  //check if job was found and update
+  if (!updatedJob) {
+    throw new Errors.NotFoundError("job application was not found");
+  }
+  //return updated job
+  res.status(StatusCodes.OK).json(updatedJob);
 };
 
 const deleteJob = (req, res) => {
