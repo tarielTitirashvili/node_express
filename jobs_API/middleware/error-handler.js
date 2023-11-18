@@ -11,7 +11,7 @@ const errorHandlerMiddleware = (err, req, res, next) => {
       .status(customError.statusCode)
       .json({ msg: customError.message });
   }
-  if (err.code) {
+  if (err.code && err.code === 11000) {
     const mongoError = Object.keys(
       err.keyValue
     )
